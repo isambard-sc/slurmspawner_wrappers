@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "slurmspawner_wrappers"
+dynamic = ["version"]
+authors = [
+  { name="James C. Womack", email="J.C.Womack@bristol.ac.uk" },
+]
+description = "Wrapper scripts for Slurm commands run by JupyterHub `SlurmSpawner`"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+		"License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Private :: Do Not Upload"
+]
+
+[project.urls]
+Homepage = "https://github.com/isambard-sc/slurmspawner_wrappers"
+
+[project.scripts]
+slurmspawner_sbatch = "slurmspawner_wrappers.scripts:run_sbatch"
+slurmspawner_squeue = "slurmspawner_wrappers.scripts:run_squeue"
+slurmspawner_scancel = "slurmspawner_wrappers.scripts:run_scancel"
+
+[tool.setuptools_scm]
+root = "."
+version_file = "src/slurmspawner_wrappers/_version.py"
