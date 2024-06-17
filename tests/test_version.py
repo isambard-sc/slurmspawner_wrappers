@@ -12,7 +12,7 @@ def test_version() -> None:
     match = re.fullmatch(r"^v?(?P<major>\d+)\.(?P<minor>\d)+\.(?P<patch>\d+).*$", __version__)
 
     assert match, "__version__ should start with a valid dotted version number"
+
+    version_tuple_from_str = (int(match.group("major")), int(match.group("minor")), int(match.group("patch")))
     
-    assert int(match.group("major")) == __version_tuple__[0]
-    assert int(match.group("minor")) == __version_tuple__[1]
-    assert int(match.group("patch")) == __version_tuple__[2]
+    assert version_tuple_from_str == __version_tuple__[0:3], "__version__ and __version_tuple__ should have consistent dotted version numbers"
