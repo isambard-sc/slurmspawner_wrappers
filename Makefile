@@ -1,8 +1,9 @@
 .DEFAULT_GOAL := help
 PROJECT_DIR := src/slurmspawner_wrappers
+TEST_DIR := tests/
 
-FORMAT_FILES := ${PROJECT_DIR}
-LINT_FILES := ${PROJECT_DIR}
+FORMAT_FILES := ${PROJECT_DIR} ${TEST_DIR}
+LINT_FILES := ${PROJECT_DIR} ${TEST_DIR}
 
 # Tooling - configure in pyproject.toml
 isort := isort
@@ -31,4 +32,4 @@ lint:
 
 .PHONY: test
 test:
-	${pytest} ${PROJECT_DIR}
+	${pytest} ${TEST_DIR}

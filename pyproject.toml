@@ -63,4 +63,7 @@ max-line-length = 120
 const-naming-style = "UPPER_CASE"
 
 [tool.pytest.ini_options]
-addopts = "--strict-markers"
+addopts = [
+    "--strict-markers",
+    "--import-mode=importlib",
+]
