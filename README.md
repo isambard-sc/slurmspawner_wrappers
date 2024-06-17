@@ -122,3 +122,15 @@ The `batch_submit_cmd`, `batch_query_cmd` and `batch_cancel_cmd` configuration a
 [batchspawner-github]: https://github.com/jupyterhub/batchspawner/
 
 **TODO**: How to set configuration attributes
+
+## Development
+
+It is recommended to develop in a virtual enviroment, with [an editable install of the package, and development tools installed](#install-with-development-dependencies).
+
+**TODO**: Outline how to run development tooling
+
+### Lint
+
+### Format
+
+### Test
