@@ -74,6 +74,16 @@ Install from the sdist or wheel placed in the `dist/` directory
 /path/to/slurmspawner-venv/bin/python -m pip install /path/to/slurmspawner_wrappers/dist/slurmspawner_wrappers-{version}-py3-none-any.whl
 ```
 
+### Install with development dependencies
+
+Use the `[dev]` optional dependency to install development tools (linting, formatting, testing etc.) alongside the `slurmspawner_wrappers` package.
+
+This is useful in combination with an editable install from a local copy of the repository. The local copy can then be worked with using the development tools.
+
+```shell
+/path/to/slurmspawner-venv/bin/python -m pip install -e '/path/to/slurmspawner_wrappers[dev]'
+```
+
 ## Usage
 
 The wrapper scripts `slurmspawner_sbatch`, `slurmspawner_squeue`, and `slurmspawner_scancel` are intended to be used as replacements for the `sbatch`, `squeue`, and `scancel` commands used by [batchspawner][batchspawner-github]'s `SlurmSpawner`.
