@@ -18,6 +18,19 @@ classifiers = [
     "Private :: Do Not Upload"
 ]
 
+[project.optional-dependencies]
+# Install development dependencies using the [dev] variant, e.g. for local
+# editable install from current directory:
+#   python -m pip install -e ".[dev]"
+dev = [
+    "pytest",
+    "autoflake",
+    "isort",
+    "black",
+    "pylint",
+    "debugpy",  # for debugging e.g. with VSCode
+]
+
 [project.urls]
 Homepage = "https://github.com/isambard-sc/slurmspawner_wrappers"
 
@@ -29,3 +42,25 @@ slurmspawner_scancel = "slurmspawner_wrappers.scripts:run_scancel"
 [tool.setuptools_scm]
 root = "."
 version_file = "src/slurmspawner_wrappers/_version.py"
+
+[tool.autoflake]
+remove-all-unused-imports = true
+ignore-init-module-imports = true
+remove-unused-variables = true
+
+[tool.isort]
+line_length = 120
+profile = 'black'
+
+[tool.black]
+line-length = 120
+target-version = ['py310']
+
+[tool.pylint.format]
+max-line-length = 120
+
+[tool.pylint.basic]
+const-naming-style = "UPPER_CASE"
+
+[tool.pytest.ini_options]
+addopts = "--strict-markers"
