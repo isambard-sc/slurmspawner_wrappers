@@ -6,6 +6,8 @@ not accept any arguments and return an integer exit code.
 """
 
 import sys
+import os
+import subprocess
 
 
 def run_sbatch() -> int:
@@ -19,5 +21,20 @@ def run_squeue() -> int:
 
 
 def run_scancel() -> int:
-    print("ERROR: function run_squeue not implemented", file=sys.stderr)
-    return 1
+    """
+    TODO: docstring
+
+    :raises SystemExit: _description_
+    :return: _description_
+    """
+    try:
+        jobid = os.environ["SLURMSPAWNER_JOB_ID"]
+    except KeyError as exc:
+        raise SystemExit("ERROR: environment variable SLURMSPAWNER_JOB_ID must be set") from exc
+
+    # Run default `scancel` command used by SlurmSpawner "scancel {job_id}", using
+    # environment variable `SLURMSPAWNER_JOB_ID` to specify job_id
+    # TODO: Use absolute path to scancel
+    completed_process = subprocess.run(args=["scancel", jobid], capture_output=False, shell=False, input=None, env=None, check=False)
+
+    return completed_process.returncode
