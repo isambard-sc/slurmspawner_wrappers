@@ -24,6 +24,7 @@ classifiers = [
 #   python -m pip install -e ".[dev]"
 dev = [
     "pytest",
+    "pytest-mock",
     "autoflake",
     "isort",
     "black",
