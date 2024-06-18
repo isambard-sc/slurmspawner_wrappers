@@ -19,7 +19,7 @@ def run_squeue() -> int:
     """
     Run `squeue` as a subprocess with job ID provided as environment variable
 
-    `squeue` is invoked using the default command form specified in 
+    `squeue` is invoked using the default command form specified in
     batchspawner.SlurmSpawner.batch_query_cmd (a template):
 
         squeue -h -j {job_id} -o '%T %B'
@@ -39,7 +39,12 @@ def run_squeue() -> int:
     # variable `SLURMSPAWNER_JOB_ID` to specify job_id
     # TODO: Use absolute path to squeue
     completed_process = subprocess.run(
-        args=["squeue", "-h", "-j", job_id, "-o", "%T %B"], capture_output=False, shell=False, input=None, env=None, check=False
+        args=["squeue", "-h", "-j", job_id, "-o", "%T %B"],
+        capture_output=False,
+        shell=False,
+        input=None,
+        env=None,
+        check=False,
     )
 
     return completed_process.returncode
@@ -49,7 +54,7 @@ def run_scancel() -> int:
     """
     Run `scancel` as a subprocess with job ID provided as environment variable
 
-    `scancel` is invoked using the default command form specified in 
+    `scancel` is invoked using the default command form specified in
     batchspawner.SlurmSpawner.batch_cancel_cmd (a template):
 
         scancel {job_id}

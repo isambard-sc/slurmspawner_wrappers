@@ -7,11 +7,11 @@ from slurmspawner_wrappers.scripts import run_scancel, run_squeue
 
 
 @pytest.mark.parametrize(
-        "test_fn",
-        [
-            pytest.param(run_scancel, id="run_scancel"),
-            pytest.param(run_squeue, id="run_squeue"),
-        ]
+    "test_fn",
+    [
+        pytest.param(run_scancel, id="run_scancel"),
+        pytest.param(run_squeue, id="run_squeue"),
+    ],
 )
 def test_run_missing_env_var(test_fn: Callable[[], int], monkeypatch: pytest.MonkeyPatch) -> None:
     """
