@@ -5,9 +5,9 @@ The wrapper functions are to be used as console script entry points to the packa
 not accept any arguments and return an integer exit code.
 """
 
-import sys
 import os
 import subprocess
+import sys
 
 
 def run_sbatch() -> int:
@@ -35,6 +35,8 @@ def run_scancel() -> int:
     # Run default `scancel` command used by SlurmSpawner "scancel {job_id}", using
     # environment variable `SLURMSPAWNER_JOB_ID` to specify job_id
     # TODO: Use absolute path to scancel
-    completed_process = subprocess.run(args=["scancel", jobid], capture_output=False, shell=False, input=None, env=None, check=False)
+    completed_process = subprocess.run(
+        args=["scancel", jobid], capture_output=False, shell=False, input=None, env=None, check=False
+    )
 
     return completed_process.returncode
