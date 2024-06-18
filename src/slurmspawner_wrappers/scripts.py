@@ -16,8 +16,33 @@ def run_sbatch() -> int:
 
 
 def run_squeue() -> int:
-    print("ERROR: function run_squeue not implemented", file=sys.stderr)
-    return 1
+    """
+    Run `squeue` as a subprocess with job ID provided as environment variable
+
+    `squeue` is invoked using the default command form specified in 
+    batchspawner.SlurmSpawner.batch_query_cmd (a template):
+
+        squeue -h -j {job_id} -o '%T %B'
+
+    In this case {job_id} is specified via environment variable SLURMSPAWNER_JOB_ID.
+
+    :raises SystemExit: if SLURMSPAWNER_JOB_ID environment variable is not present in the current
+        process environment
+    :return: the integer return code of the `squeue` subprocess
+    """
+    try:
+        job_id = os.environ["SLURMSPAWNER_JOB_ID"]
+    except KeyError as exc:
+        raise SystemExit("ERROR: environment variable SLURMSPAWNER_JOB_ID must be set") from exc
+
+    # Run default `squeue` command used by SlurmSpawner, using environment
+    # variable `SLURMSPAWNER_JOB_ID` to specify job_id
+    # TODO: Use absolute path to squeue
+    completed_process = subprocess.run(
+        args=["squeue", "-h", "-j", job_id, "-o", "%T %B"], capture_output=False, shell=False, input=None, env=None, check=False
+    )
+
+    return completed_process.returncode
 
 
 def run_scancel() -> int:
@@ -36,15 +61,15 @@ def run_scancel() -> int:
     :return: the integer return code of the `scancel` subprocess
     """
     try:
-        jobid = os.environ["SLURMSPAWNER_JOB_ID"]
+        job_id = os.environ["SLURMSPAWNER_JOB_ID"]
     except KeyError as exc:
         raise SystemExit("ERROR: environment variable SLURMSPAWNER_JOB_ID must be set") from exc
 
-    # Run default `scancel` command used by SlurmSpawner "scancel {job_id}", using
-    # environment variable `SLURMSPAWNER_JOB_ID` to specify job_id
+    # Run default `scancel` command used by SlurmSpawner environment variable
+    # `SLURMSPAWNER_JOB_ID` to specify job_id
     # TODO: Use absolute path to scancel
     completed_process = subprocess.run(
-        args=["scancel", jobid], capture_output=False, shell=False, input=None, env=None, check=False
+        args=["scancel", job_id], capture_output=False, shell=False, input=None, env=None, check=False
     )
 
     return completed_process.returncode
