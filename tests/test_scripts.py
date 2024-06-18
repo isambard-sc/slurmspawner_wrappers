@@ -3,18 +3,25 @@ from collections.abc import Callable
 
 import pytest
 
-from slurmspawner_wrappers.scripts import run_scancel
+from slurmspawner_wrappers.scripts import run_scancel, run_squeue
 
 
-def test_run_scancel_missing_env_var(monkeypatch: pytest.MonkeyPatch) -> None:
+@pytest.mark.parametrize(
+        "test_fn",
+        [
+            pytest.param(run_scancel, id="run_scancel"),
+            pytest.param(run_squeue, id="run_squeue"),
+        ]
+)
+def test_run_missing_env_var(test_fn: Callable[[], int], monkeypatch: pytest.MonkeyPatch) -> None:
     """
-    Check run_scancel() raises a SystemExit exception when expected environment variable is missing
+    Check `test_fn` raises a SystemExit exception when expected environment variable is missing
     """
 
     monkeypatch.delenv("SLURMSPAWNER_JOB_ID", raising=False)
 
     with pytest.raises(SystemExit):
-        _ = run_scancel()
+        _ = test_fn()
 
 
 @pytest.fixture(scope="function", params=[pytest.param(0, id="returncode=0"), pytest.param(1, id="returncode=1")])
@@ -45,9 +52,33 @@ def test_run_scancel(monkeypatch: pytest.MonkeyPatch, patched_subprocess_run: Ca
 
     assert (
         returncode == patched_subprocess_run.return_value.returncode
-    ), "return code from run_scancel() should match value set for subprocess.run()"
+    ), "return code should match value set for subprocess.run()"
     patched_subprocess_run.assert_called_once()
     assert patched_subprocess_run.call_args.kwargs["args"] == [
         "scancel",
         job_id,
+    ], "subprocess.run() should be called with expected 'args' kwarg"
+
+
+def test_run_squeue(monkeypatch: pytest.MonkeyPatch, patched_subprocess_run: Callable) -> None:
+    """
+    Check run_squeue() calls subprocess.run() with expected arguments and returns subprocess returncode
+    """
+
+    job_id = "1234"
+    monkeypatch.setenv("SLURMSPAWNER_JOB_ID", job_id)
+
+    returncode = run_squeue()
+
+    assert (
+        returncode == patched_subprocess_run.return_value.returncode
+    ), "return code should match value set for subprocess.run()"
+    patched_subprocess_run.assert_called_once()
+    assert patched_subprocess_run.call_args.kwargs["args"] == [
+        "squeue",
+        "-h",
+        "-j",
+        job_id,
+        "-o",
+        "%T %B",
     ], "subprocess.run() should be called with expected 'args' kwarg"
