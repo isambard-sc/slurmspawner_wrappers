@@ -22,10 +22,11 @@ def run_squeue() -> int:
 
 def run_scancel() -> int:
     """
-    TODO: docstring
+    Run `scancel` as a subprocess with job ID provided as environment variable
 
-    :raises SystemExit: _description_
-    :return: _description_
+    :raises SystemExit: if SLURMSPAWNER_JOB_ID environment variable is not present in the current
+        process environment
+    :return: the integer return code of the `scancel` subprocess
     """
     try:
         jobid = os.environ["SLURMSPAWNER_JOB_ID"]
