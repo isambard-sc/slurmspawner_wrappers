@@ -24,6 +24,13 @@ def run_scancel() -> int:
     """
     Run `scancel` as a subprocess with job ID provided as environment variable
 
+    `scancel` is invoked using the default command form specified in 
+    batchspawner.SlurmSpawner.batch_cancel_cmd (a template):
+
+        scancel {job_id}
+
+    In this case {job_id} is specified via environment variable SLURMSPAWNER_JOB_ID.
+
     :raises SystemExit: if SLURMSPAWNER_JOB_ID environment variable is not present in the current
         process environment
     :return: the integer return code of the `scancel` subprocess
