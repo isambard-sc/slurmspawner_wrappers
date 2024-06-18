@@ -17,7 +17,7 @@ def test_run_scancel_missing_env_var(monkeypatch: pytest.MonkeyPatch) -> None:
         _ = run_scancel()
 
 
-@pytest.fixture(scope="function", params=[0, 1])
+@pytest.fixture(scope="function", params=[pytest.param(0, id="returncode=0"), pytest.param(1, id="returncode=1")])
 def patched_subprocess_run(request: pytest.FixtureRequest, mocker) -> Callable:
     """
     Create a mocked subprocess.run() for testing
