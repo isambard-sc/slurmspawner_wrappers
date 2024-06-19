@@ -11,6 +11,21 @@ import sys
 
 
 def run_sbatch() -> int:
+    """
+    Run `sbatch` as a subprocess with batch script provided through stdin
+
+    `sbatch` is invoked using the default command form specified in
+    batchspawner.SlurmSpawner.batch_submit_cmd (a template):
+
+        sbatch --parsable
+
+    When submitting a batch script via batchspawner.BatchSpawner.submit_batch_script(), the
+    batch script (from batchspawner.SlurmSpawner.batch_script) is passed to stdin of sbatch
+    (see batchspawner.BatchSpawner.run_command() for implementation)
+
+    # TODO: Add :raises Exception: if exception raised by `run_sbatch()`
+    :return: the integer return code of the `sbatch` subprocess
+    """
     print("ERROR: function run_sbatch not implemented", file=sys.stderr)
     return 1
 
