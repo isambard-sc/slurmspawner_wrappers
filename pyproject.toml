@@ -68,3 +68,5 @@ addopts = [
     "--strict-markers",
     "--import-mode=importlib",
 ]
+tmp_path_retention_count = 3
+tmp_path_retention_policy = "all"
