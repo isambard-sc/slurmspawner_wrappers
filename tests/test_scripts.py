@@ -14,6 +14,7 @@ sbatch_cmd_present = pytest.mark.skipif(which("sbatch") is None, reason="`sbatch
 squeue_cmd_present = pytest.mark.skipif(which("squeue") is None, reason="`squeue` command required")
 scancel_cmd_present = pytest.mark.skipif(which("scancel") is None, reason="`scancel` command required")
 
+
 @pytest.mark.parametrize(
     "test_fn",
     [
@@ -107,7 +108,9 @@ def test_run_sbatch(patched_subprocess_run: Callable) -> None:
         "sbatch",
         "--parsable",
     ], "subprocess.run() should be called with expected 'args' kwarg"
-    assert patched_subprocess_run.call_args.kwargs["stdin"] is sys.stdin, "subprocess.run() should be called with expected 'stdin' kwarg"
+    assert (
+        patched_subprocess_run.call_args.kwargs["stdin"] is sys.stdin
+    ), "subprocess.run() should be called with expected 'stdin' kwarg"
 
 
 @pytest.fixture
@@ -120,12 +123,12 @@ def mock_batch_script_stdin(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> 
 
     # Simple job submission script that requests 1 task on 1 node for 2 minutes (and 100M memory)
     # This waits for 60s to allow time for job to be queried and cancelled. Output is redirected
-    # to /dev/null (no output file written)
+    # to /dev/null (no output file written)
     script_path.write_text(
-        '\n'.join(
+        "\n".join(
             [
                 "#!/bin/bash",
-                "#SBATCH --job-name=\"pytest-slurmspawner_wrappers\"",
+                '#SBATCH --job-name="pytest-slurmspawner_wrappers"',
                 "#SBATCH --nodes=1",
                 "#SBATCH --ntasks-per-node=1",
                 "#SBATCH --time=2",
@@ -141,6 +144,7 @@ def mock_batch_script_stdin(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> 
     with open(script_path, "r") as mock_stdin:
         monkeypatch.setattr("sys.stdin", mock_stdin)
         yield mock_stdin
+
 
 # Possible long-form ``squeue`` state codes, from https://slurm.schedmd.com/squeue.html#SECTION_JOB-STATE-CODES
 SQUEUE_STATES = [
@@ -174,7 +178,11 @@ SQUEUE_STATES = [
 @sbatch_cmd_present
 @squeue_cmd_present
 @scancel_cmd_present
-def test_integration(mock_batch_script_stdin: Generator[io.TextIOWrapper, None, None], capfd: Generator[pytest.CaptureFixture[str], None, None], monkeypatch: pytest.MonkeyPatch) -> None:
+def test_integration(
+    mock_batch_script_stdin: Generator[io.TextIOWrapper, None, None],
+    capfd: Generator[pytest.CaptureFixture[str], None, None],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """
     Integration test that submits, queries, and cancels a test job
 
@@ -204,7 +212,9 @@ def test_integration(mock_batch_script_stdin: Generator[io.TextIOWrapper, None, 
     match = re.fullmatch(r"^(?P<job_state>[A-Z_]+) (?P<batch_host>.*)$", squeue_out)
 
     assert match, "squeue output should match regular expression"
-    assert match.group("job_state") in SQUEUE_STATES, "job state in squeue output should match one of the possible squeue job state codes"
+    assert (
+        match.group("job_state") in SQUEUE_STATES
+    ), "job state in squeue output should match one of the possible squeue job state codes"
 
     # CANCEL JOB
     returncode = run_scancel()
@@ -213,4 +223,3 @@ def test_integration(mock_batch_script_stdin: Generator[io.TextIOWrapper, None, 
     #    return a non-zero error code even when given job ids for jobs that have already been cancelled!
     # TODO: Explicitly check the job has been cancelled/ended
     assert returncode == 0, "expect return code 0 from run_scancel()"
-
