@@ -23,11 +23,22 @@ def run_sbatch() -> int:
     batch script (from batchspawner.SlurmSpawner.batch_script) is passed to stdin of sbatch
     (see batchspawner.BatchSpawner.run_command() for implementation)
 
-    # TODO: Add :raises Exception: if exception raised by `run_sbatch()`
     :return: the integer return code of the `sbatch` subprocess
     """
-    print("ERROR: function run_sbatch not implemented", file=sys.stderr)
-    return 1
+    # Run default `sbatch` command used by SlurmSpawner, passing stdin of Python process
+    # to subprocess
+    # TODO: Use absolute path to sbatch
+    completed_process = subprocess.run(
+        args=["sbatch", "--parsable"],
+        stdin=sys.stdin,
+        capture_output=False,
+        shell=False,
+        input=None,
+        env=None,
+        check=False,
+    )
+
+    return completed_process.returncode
 
 
 def run_squeue() -> int:
