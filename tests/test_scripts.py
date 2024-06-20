@@ -82,3 +82,21 @@ def test_run_squeue(monkeypatch: pytest.MonkeyPatch, patched_subprocess_run: Cal
         "-o",
         "%T %B",
     ], "subprocess.run() should be called with expected 'args' kwarg"
+
+
+def test_run_sbatch(patched_subprocess_run: Callable) -> None:
+    """
+    Check run_batch() calls subprocess.run() with expected arguments and returns subprocess returncode
+    """
+
+    returncode = run_sbatch()
+
+    assert (
+        returncode == patched_subprocess_run.return_value.returncode
+    ), "return code should match value set for subprocess.run()"
+    patched_subprocess_run.assert_called_once()
+    assert patched_subprocess_run.call_args.kwargs["args"] == [
+        "sbatch",
+        "--parsable",
+    ], "subprocess.run() should be called with expected 'args' kwarg"
+    assert patched_subprocess_run.call_args.kwargs["stdin"] is sys.stdin, "subprocess.run() should be called with expected 'stdin' kwarg"
