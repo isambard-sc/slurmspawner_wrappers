@@ -1,6 +1,7 @@
 """
 Package-wide constants
 """
+
 from pathlib import Path
 
 # For security and reliability the wrapper scripts use absolute paths to

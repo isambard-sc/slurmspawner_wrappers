@@ -4,12 +4,11 @@ import subprocess
 import sys
 from collections.abc import Callable, Generator
 from pathlib import Path
-from shutil import which
 
 import pytest
 
-from slurmspawner_wrappers.scripts import run_sbatch, run_scancel, run_squeue
 from slurmspawner_wrappers.constants import SBATCH_PATH, SCANCEL_PATH, SQUEUE_PATH
+from slurmspawner_wrappers.scripts import run_sbatch, run_scancel, run_squeue
 
 sbatch_cmd_present = pytest.mark.skipif(not SBATCH_PATH.is_file(), reason="`sbatch` command required")
 squeue_cmd_present = pytest.mark.skipif(not SQUEUE_PATH.is_file(), reason="`squeue` command required")
