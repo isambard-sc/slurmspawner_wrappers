@@ -9,10 +9,11 @@ from shutil import which
 import pytest
 
 from slurmspawner_wrappers.scripts import run_sbatch, run_scancel, run_squeue
+from slurmspawner_wrappers.constants import SBATCH_PATH, SCANCEL_PATH, SQUEUE_PATH
 
-sbatch_cmd_present = pytest.mark.skipif(which("sbatch") is None, reason="`sbatch` command required")
-squeue_cmd_present = pytest.mark.skipif(which("squeue") is None, reason="`squeue` command required")
-scancel_cmd_present = pytest.mark.skipif(which("scancel") is None, reason="`scancel` command required")
+sbatch_cmd_present = pytest.mark.skipif(not SBATCH_PATH.is_file(), reason="`sbatch` command required")
+squeue_cmd_present = pytest.mark.skipif(not SQUEUE_PATH.is_file(), reason="`squeue` command required")
+scancel_cmd_present = pytest.mark.skipif(not SCANCEL_PATH.is_file(), reason="`scancel` command required")
 
 
 @pytest.mark.parametrize(
@@ -64,7 +65,7 @@ def test_run_scancel(monkeypatch: pytest.MonkeyPatch, patched_subprocess_run: Ca
     ), "return code should match value set for subprocess.run()"
     patched_subprocess_run.assert_called_once()
     assert patched_subprocess_run.call_args.kwargs["args"] == [
-        "scancel",
+        str(SCANCEL_PATH),
         job_id,
     ], "subprocess.run() should be called with expected 'args' kwarg"
 
@@ -84,7 +85,7 @@ def test_run_squeue(monkeypatch: pytest.MonkeyPatch, patched_subprocess_run: Cal
     ), "return code should match value set for subprocess.run()"
     patched_subprocess_run.assert_called_once()
     assert patched_subprocess_run.call_args.kwargs["args"] == [
-        "squeue",
+        str(SQUEUE_PATH),
         "-h",
         "-j",
         job_id,
@@ -105,7 +106,7 @@ def test_run_sbatch(patched_subprocess_run: Callable) -> None:
     ), "return code should match value set for subprocess.run()"
     patched_subprocess_run.assert_called_once()
     assert patched_subprocess_run.call_args.kwargs["args"] == [
-        "sbatch",
+        str(SBATCH_PATH),
         "--parsable",
     ], "subprocess.run() should be called with expected 'args' kwarg"
     assert (

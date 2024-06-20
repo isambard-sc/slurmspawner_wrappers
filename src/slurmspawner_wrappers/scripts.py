@@ -9,6 +9,8 @@ import os
 import subprocess
 import sys
 
+from .constants import SBATCH_PATH, SCANCEL_PATH, SQUEUE_PATH
+
 
 def run_sbatch() -> int:
     """
@@ -27,9 +29,8 @@ def run_sbatch() -> int:
     """
     # Run default `sbatch` command used by SlurmSpawner, passing stdin of Python process
     # to subprocess
-    # TODO: Use absolute path to sbatch
     completed_process = subprocess.run(
-        args=["sbatch", "--parsable"],
+        args=[str(SBATCH_PATH), "--parsable"],
         stdin=sys.stdin,
         capture_output=False,
         shell=False,
@@ -63,9 +64,8 @@ def run_squeue() -> int:
 
     # Run default `squeue` command used by SlurmSpawner, using environment
     # variable `SLURMSPAWNER_JOB_ID` to specify job_id
-    # TODO: Use absolute path to squeue
     completed_process = subprocess.run(
-        args=["squeue", "-h", "-j", job_id, "-o", "%T %B"],
+        args=[str(SQUEUE_PATH), "-h", "-j", job_id, "-o", "%T %B"],
         capture_output=False,
         shell=False,
         input=None,
@@ -98,9 +98,8 @@ def run_scancel() -> int:
 
     # Run default `scancel` command used by SlurmSpawner environment variable
     # `SLURMSPAWNER_JOB_ID` to specify job_id
-    # TODO: Use absolute path to scancel
     completed_process = subprocess.run(
-        args=["scancel", job_id], capture_output=False, shell=False, input=None, env=None, check=False
+        args=[str(SCANCEL_PATH), job_id], capture_output=False, shell=False, input=None, env=None, check=False
     )
 
     return completed_process.returncode
