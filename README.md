@@ -129,7 +129,7 @@ c.SlurmSpawner.batch_query_cmd = "env SLURMSPAWNER_JOB_ID={{job_id}} /path/to/sl
 c.SlurmSpawner.batch_cancel_cmd = "env SLURMSPAWNER_JOB_ID={{job_id}} /path/to/slurmspawner_wrappers-venv/bin/slurmspawner_scancel"
 ```
 
-This example assumes that the `slurmspawner_wrappers` package was installed in a virtual environment, [as recommmended above](#install).
+This example assumes that the `slurmspawner_wrappers` package was installed in a virtual environment, [as recommended above](#install).
 
 Batchspawner renders the `batch_*_cmd` configuration options as templates and runs the commands in a shell. `job_id` is a template variable which is set to the Slurm job ID of the spawner user session when the command is running. The submission script is passed to the `batch_submit_cmd` via stdin. See [batchspawner.py][batchspawner.py-batchspawner-github] for implementation.
 
@@ -139,7 +139,7 @@ The `env` command is used to set the environment variable `SLURMSPAWNER_JOB_ID` 
 
 ## Development
 
-It is recommended to develop in a virtual enviroment, with [an editable install of the package, and development tools installed](#install-with-development-dependencies).
+It is recommended to develop in a virtual environment, with [an editable install of the package, and development tools installed](#install-with-development-dependencies).
 
 ### Documentation
   
