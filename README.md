@@ -141,10 +141,33 @@ The `env` command is used to set the environment variable `SLURMSPAWNER_JOB_ID` 
 
 It is recommended to develop in a virtual enviroment, with [an editable install of the package, and development tools installed](#install-with-development-dependencies).
 
-**TODO**: Outline how to run development tooling
+### Documentation
+  
+Source documentation should be done using docstrings (see e.g. [PEP-257][pep-257]) using [Sphinx style convention][sphinx-rtd-tutorial-docstrings]
+
+[pep-257]: https://peps.python.org/pep-0257/
+[sphinx-rtd-tutorial-docstrings]: https://sphinx-rtd-tutorial.readthedocs.io/en/latest/docstrings.html
 
 ### Lint
 
+Check source files for issues (no modification):
+
+```shell
+make lint
+```
+
 ### Format
 
+In-place modification of source files to fix issues:
+
+```shell
+make format
+```
+
 ### Test
+
+Run tests for package:
+
+```shell
+make test
+```
